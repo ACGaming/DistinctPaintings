@@ -1,9 +1,12 @@
 package mod.acgaming.distinctpaintings.item;
 
 import java.lang.reflect.Constructor;
+import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,6 +19,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import mod.acgaming.distinctpaintings.DistinctPaintings;
 
@@ -26,34 +31,6 @@ public class DPItemPaintingVariant extends ItemHangingEntity
         super(entityClass);
         this.setRegistryName(DistinctPaintings.MOD_ID, "painting_variant");
         this.setTranslationKey("painting.name");
-    }
-
-    @Override
-    public String getItemStackDisplayName(ItemStack stack)
-    {
-        String title = getTitleFromStack(stack);
-        return I18n.format(this.getTranslationKey()) + " (" + title + ")";
-    }
-
-    @Override
-    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items)
-    {
-        if (isInCreativeTab(tab))
-        {
-            int count = 0;
-
-            for (EntityPainting.EnumArt art : EntityPainting.EnumArt.values())
-            {
-                ItemStack itemStack = new ItemStack(this);
-                itemStack.setTagCompound(createNBTForArt(art));
-                items.add(itemStack);
-
-                DistinctPaintings.LOGGER.debug("Added {}", itemStack.getDisplayName());
-                count++;
-            }
-
-            DistinctPaintings.LOGGER.info("Total paintings: {}", count);
-        }
     }
 
     @Override
@@ -97,6 +74,45 @@ public class DPItemPaintingVariant extends ItemHangingEntity
         }
 
         return EnumActionResult.FAIL;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag)
+    {
+        super.addInformation(stack, world, tooltip, flag);
+        EntityPainting.EnumArt art = EntityPainting.EnumArt.valueOf(getMotiveFromStack(stack));
+        int width = art.sizeX >> 4;
+        int height = art.sizeY >> 4;
+        tooltip.add(width + "x" + height);
+    }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack stack)
+    {
+        String title = getTitleFromStack(stack);
+        return I18n.format(this.getTranslationKey()) + " (" + title + ")";
+    }
+
+    @Override
+    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items)
+    {
+        if (isInCreativeTab(tab))
+        {
+            int count = 0;
+
+            for (EntityPainting.EnumArt art : EntityPainting.EnumArt.values())
+            {
+                ItemStack itemStack = new ItemStack(this);
+                itemStack.setTagCompound(createNBTForArt(art));
+                items.add(itemStack);
+
+                DistinctPaintings.LOGGER.debug("Added {}", itemStack.getDisplayName());
+                count++;
+            }
+
+            DistinctPaintings.LOGGER.info("Total paintings: {}", count);
+        }
     }
 
     private NBTTagCompound createNBTForArt(EntityPainting.EnumArt art)
