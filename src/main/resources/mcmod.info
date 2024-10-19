@@ -1,0 +1,12 @@
+[
+  {
+    "modid": "distinctpaintings",
+    "name": "Distinct Paintings",
+    "description": "Motivated for motives!",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://github.com/ACGaming/DistinctPaintings",
+    "authorList": ["ACGaming"],
+    "credits": "xkforce for commissioning"
+  }
+]
