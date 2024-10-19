@@ -3,7 +3,7 @@ package mod.acgaming.distinctpaintings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 
 import mod.acgaming.distinctpaintings.registry.DPRegistry;
 
@@ -18,9 +18,8 @@ public class DistinctPaintings
     public static final Logger LOGGER = LogManager.getLogger(NAME);
 
     @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent event)
+    public void loadComplete(FMLLoadCompleteEvent event)
     {
-        DPRegistry.registerItems();
-        LOGGER.info("Distinct Paintings initialized");
+        DPRegistry.updatePaintingVariants();
     }
 }

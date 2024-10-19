@@ -40,12 +40,19 @@ public class DPItemPaintingVariant extends ItemHangingEntity
     {
         if (isInCreativeTab(tab))
         {
+            int count = 0;
+
             for (EntityPainting.EnumArt art : EntityPainting.EnumArt.values())
             {
                 ItemStack itemStack = new ItemStack(this);
                 itemStack.setTagCompound(createNBTForArt(art));
                 items.add(itemStack);
+
+                DistinctPaintings.LOGGER.debug("Added {}", itemStack.getDisplayName());
+                count++;
             }
+
+            DistinctPaintings.LOGGER.info("Total paintings: {}", count);
         }
     }
 
@@ -64,7 +71,6 @@ public class DPItemPaintingVariant extends ItemHangingEntity
             {
                 Class<?> entityPaintingClass = EntityPainting.class;
                 Constructor<?> constructor = entityPaintingClass.getConstructor(World.class, BlockPos.class, EnumFacing.class, EntityPainting.EnumArt.class);
-
                 EntityPainting painting = (EntityPainting) constructor.newInstance(world, blockPos, facing, art);
 
                 if (painting.onValidSurface())
