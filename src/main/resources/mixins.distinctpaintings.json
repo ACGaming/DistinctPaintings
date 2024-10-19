@@ -1,5 +1,6 @@
 {
   "package": "mod.acgaming.distinctpaintings.mixin",
+  "refmap": "mixins.distinctpaintings.refmap.json",
   "mixins": [
     "DPEntityPaintingMixin"
   ]
