@@ -1,12 +1,16 @@
-package mod.acgaming.distinctpaintings.asm;
+package mod.acgaming.distinctpaintings.core;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
+import zone.rong.mixinbooter.IEarlyMixinLoader;
+
 @IFMLLoadingPlugin.Name("DistinctPaintingsCoreMod")
 @IFMLLoadingPlugin.MCVersion("1.12.2")
-public class DistinctPaintingsCoreMod implements IFMLLoadingPlugin
+public class DistinctPaintingsCoreMod implements IFMLLoadingPlugin, IEarlyMixinLoader
 {
     @Override
     public String[] getASMTransformerClass()
@@ -35,5 +39,11 @@ public class DistinctPaintingsCoreMod implements IFMLLoadingPlugin
     public String getAccessTransformerClass()
     {
         return null;
+    }
+
+    @Override
+    public List<String> getMixinConfigs()
+    {
+        return Collections.singletonList("mixins.distinctpaintings.json");
     }
 }

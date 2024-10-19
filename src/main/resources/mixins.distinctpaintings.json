@@ -1,0 +1,6 @@
+{
+  "package": "mod.acgaming.distinctpaintings.mixin",
+  "mixins": [
+    "DPEntityPaintingMixin"
+  ]
+}
