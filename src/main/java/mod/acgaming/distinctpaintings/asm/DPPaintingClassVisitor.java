@@ -1,5 +1,7 @@
 package mod.acgaming.distinctpaintings.asm;
 
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -41,7 +43,7 @@ public class DPPaintingClassVisitor extends ClassVisitor
             mv.visitFieldInsn(
                 Opcodes.PUTFIELD,
                 "net/minecraft/entity/item/EntityPainting",
-                "art",
+                FMLLaunchHandler.isDeobfuscatedEnvironment() ? "art" : "field_70522_e",
                 "Lnet/minecraft/entity/item/EntityPainting$EnumArt;"
             );
             mv.visitVarInsn(Opcodes.ALOAD, 0); // load 'this'
@@ -49,7 +51,7 @@ public class DPPaintingClassVisitor extends ClassVisitor
             mv.visitMethodInsn(
                 Opcodes.INVOKEVIRTUAL,
                 "net/minecraft/entity/item/EntityPainting",
-                "updateFacingWithBoundingBox",
+                FMLLaunchHandler.isDeobfuscatedEnvironment() ? "updateFacingWithBoundingBox" : "func_174859_a",
                 "(Lnet/minecraft/util/EnumFacing;)V",
                 false
             );
