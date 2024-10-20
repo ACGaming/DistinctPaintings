@@ -4,12 +4,11 @@ import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import mod.acgaming.distinctpaintings.registry.DPRegistry;
+import mod.acgaming.distinctpaintings.util.DPUtil;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
@@ -25,16 +24,7 @@ public abstract class DPEntityPaintingMixin extends EntityHanging
     private EntityItem dpOnBroken(EntityPainting entityPainting, ItemStack stack, float offsetY)
     {
         ItemStack paintingVariant = new ItemStack(DPRegistry.paintingVariant);
-        paintingVariant.setTagCompound(dp$createNBTForArt(entityPainting.art));
+        paintingVariant.setTagCompound(DPUtil.createNBTForArt(entityPainting.art));
         return this.entityDropItem(paintingVariant, offsetY);
-    }
-
-    @Unique
-    private NBTTagCompound dp$createNBTForArt(EntityPainting.EnumArt art)
-    {
-        NBTTagCompound compound = new NBTTagCompound();
-        compound.setString("Motive", art.name());
-        compound.setString("Title", art.title);
-        return compound;
     }
 }

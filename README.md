@@ -9,5 +9,5 @@ A simple mod that splits the random painting item into distinct variants with NB
 ### TODO:
 
 * [x] Correct item dropping in Survival Mode
-* [ ] Pick block functionality in Creative Mode
+* [x] Pick block functionality in Creative Mode
 * [ ] Render painting motives on items?

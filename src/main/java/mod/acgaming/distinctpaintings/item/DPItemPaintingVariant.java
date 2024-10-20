@@ -12,7 +12,6 @@ import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemHangingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -23,6 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import mod.acgaming.distinctpaintings.DistinctPaintings;
+import mod.acgaming.distinctpaintings.util.DPUtil;
 
 public class DPItemPaintingVariant extends ItemHangingEntity
 {
@@ -41,7 +41,7 @@ public class DPItemPaintingVariant extends ItemHangingEntity
 
         if (facing != EnumFacing.DOWN && facing != EnumFacing.UP && player.canPlayerEdit(blockPos, facing, stack))
         {
-            String motive = getMotiveFromStack(stack);
+            String motive = DPUtil.getMotiveFromStack(stack);
             EntityPainting.EnumArt art = EntityPainting.EnumArt.valueOf(motive);
 
             try
@@ -81,7 +81,7 @@ public class DPItemPaintingVariant extends ItemHangingEntity
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag)
     {
         super.addInformation(stack, world, tooltip, flag);
-        EntityPainting.EnumArt art = EntityPainting.EnumArt.valueOf(getMotiveFromStack(stack));
+        EntityPainting.EnumArt art = EntityPainting.EnumArt.valueOf(DPUtil.getMotiveFromStack(stack));
         int width = art.sizeX >> 4;
         int height = art.sizeY >> 4;
         tooltip.add(width + "x" + height);
@@ -90,7 +90,7 @@ public class DPItemPaintingVariant extends ItemHangingEntity
     @Override
     public String getItemStackDisplayName(ItemStack stack)
     {
-        String title = getTitleFromStack(stack);
+        String title = DPUtil.getTitleFromStack(stack);
         return I18n.format(this.getTranslationKey()) + " (" + title + ")";
     }
 
@@ -104,7 +104,7 @@ public class DPItemPaintingVariant extends ItemHangingEntity
             for (EntityPainting.EnumArt art : EntityPainting.EnumArt.values())
             {
                 ItemStack itemStack = new ItemStack(this);
-                itemStack.setTagCompound(createNBTForArt(art));
+                itemStack.setTagCompound(DPUtil.createNBTForArt(art));
                 items.add(itemStack);
 
                 DistinctPaintings.LOGGER.debug("Added {}", itemStack.getDisplayName());
@@ -113,31 +113,5 @@ public class DPItemPaintingVariant extends ItemHangingEntity
 
             DistinctPaintings.LOGGER.info("Total paintings: {}", count);
         }
-    }
-
-    private NBTTagCompound createNBTForArt(EntityPainting.EnumArt art)
-    {
-        NBTTagCompound compound = new NBTTagCompound();
-        compound.setString("Motive", art.name());
-        compound.setString("Title", art.title);
-        return compound;
-    }
-
-    private String getMotiveFromStack(ItemStack stack)
-    {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("Motive"))
-        {
-            return stack.getTagCompound().getString("Motive");
-        }
-        return "UNKNOWN";
-    }
-
-    private String getTitleFromStack(ItemStack stack)
-    {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("Title"))
-        {
-            return stack.getTagCompound().getString("Title");
-        }
-        return "UNKNOWN";
     }
 }
